@@ -22,24 +22,24 @@ public class OpenAiController {
 
     //We use .create() in the constructor when we have multiple
     //models.
-    //public OpenAiController(OpenAiChatModel openAiChatModel) {
-    //    this.chatClient=ChatClient.create(openAiChatModel);
-    //}
-
-    //Define a type of memory to use in the advisor
-    ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
-
-    //We use builder when we have only one model
-    public  OpenAiController(ChatClient.Builder builder){
-        this.chatClient= builder
-                //add advisors to edit the responses, censor or add memory to conversation
-                .defaultAdvisors(MessageChatMemoryAdvisor
-                        .builder(chatMemory)
-                        .build())
-                .build();
+    public OpenAiController(OpenAiChatModel openAiChatModel) {
+        this.chatClient=ChatClient.create(openAiChatModel);
     }
 
-    @GetMapping("api/{message}")
+    //Define a type of memory to use in the advisor
+//    ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
+
+    //We use builder when we have only one model
+//    public  OpenAiController(ChatClient.Builder builder){
+//        this.chatClient= builder
+//                add advisors to edit the responses, censor or add memory to conversation
+//                .defaultAdvisors(MessageChatMemoryAdvisor
+//                        .builder(chatMemory)
+//                        .build())
+//                .build();
+//    }
+
+    //@GetMapping("api/{message}")
     public ResponseEntity<String> test(@PathVariable String message) {
 
         ChatResponse chatResponse = chatClient
