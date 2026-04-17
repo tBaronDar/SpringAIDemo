@@ -17,8 +17,15 @@ public class OpenAiController {
 
     private ChatClient chatClient;
 
-    public OpenAiController(OpenAiChatModel openAiChatModel) {
-        this.chatClient=ChatClient.create(openAiChatModel);
+    //We use .create() in the constructor when we have multiple
+    //models.
+    //public OpenAiController(OpenAiChatModel openAiChatModel) {
+    //    this.chatClient=ChatClient.create(openAiChatModel);
+    //}
+
+    //We use builder when we have only one model
+    public  OpenAiController(ChatClient.Builder builder){
+        this.chatClient= builder.build();
     }
 
     @GetMapping("api/{message}")
