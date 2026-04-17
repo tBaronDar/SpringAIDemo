@@ -1,6 +1,9 @@
 package com.tBaronDar.SpringAiCode;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,17 @@ public class OpenAiController {
     //    this.chatClient=ChatClient.create(openAiChatModel);
     //}
 
+    //Define a type of memory to use in the advisor
+    ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
+
     //We use builder when we have only one model
     public  OpenAiController(ChatClient.Builder builder){
-        this.chatClient= builder.build();
+        this.chatClient= builder
+                //add advisors to edit the responses, censor or add memory to conversation
+                .defaultAdvisors(MessageChatMemoryAdvisor
+                        .builder(chatMemory)
+                        .build())
+                .build();
     }
 
     @GetMapping("api/{message}")
