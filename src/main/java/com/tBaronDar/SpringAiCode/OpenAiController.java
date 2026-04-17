@@ -17,7 +17,7 @@ public class OpenAiController {
     public String test(@PathVariable String message) {
 
         String response = chatModel.call(message);
-        return "Jello" + message;
+        return "Jello" + response;
     }
 
 }
