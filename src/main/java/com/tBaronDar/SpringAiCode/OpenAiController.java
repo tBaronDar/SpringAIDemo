@@ -16,12 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 // import io.modelcontextprotocol.spec.McpSchema.Prompt;
 
 @RestController
+@RequestMapping("/api")
 public class OpenAiController {
 
   // generally ChatModel has limited functionality
@@ -53,7 +55,7 @@ public class OpenAiController {
         .build();
   }
 
-  @GetMapping("api/{message}")
+  @GetMapping("/{message}")
   public ResponseEntity<String> test(@PathVariable String message) {
 
     ChatResponse chatResponse = chatClient
@@ -71,7 +73,7 @@ public class OpenAiController {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("api/recommend")
+  @PostMapping("/recommend")
   public ResponseEntity<String> recommendMovie(@RequestParam String type, @RequestParam String year,
       @RequestParam String lang) {
 
@@ -111,10 +113,19 @@ public class OpenAiController {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/api/embedding")
+  @PostMapping("/embedding")
   public float[] embedding(@RequestParam String text) {
     embeddingModel.embed(text);
     return null;
+  }
+
+  @PostMapping("/similarity")
+  public double getSimilarity(@RequestParam String text1, @RequestParam String text2) {
+
+    float[] embedding1 = embeddingModel.embed(text1);
+    float[] embedding2 = embeddingModel.embed(text2);
+
+    return CosSimilarity.calc2(embedding1, embedding2);
   }
 
 }
