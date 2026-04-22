@@ -8,8 +8,10 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,10 @@ public class OpenAiController {
   // private OpenAiChatModel chatModel;
 
   private ChatClient chatClient;
+
+  // required for embedding
+  @Autowired
+  private EmbeddingModel embeddingModel;
 
   // We use .create() in the constructor when we have multiple
   // models.
@@ -103,6 +109,12 @@ public class OpenAiController {
         .getText();
 
     return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/api/embedding")
+  public float[] embedding(@RequestParam String text) {
+    embeddingModel.embed(text);
+    return null;
   }
 
 }
