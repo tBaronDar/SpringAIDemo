@@ -128,4 +128,9 @@ public class OpenAiController {
     return CosSimilarity.calc2(embedding1, embedding2);
   }
 
+  @PostMapping("/product")
+  public String getProducts(@RequestParam String text) {
+
+    return "";
+  }
 }
