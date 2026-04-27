@@ -1,5 +1,6 @@
 package com.tBaronDar.SpringAiCode;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
@@ -8,7 +9,10 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +47,10 @@ public class OpenAiController {
 
   // Define a type of memory to use in the advisor
   ChatMemory chatMemory = MessageWindowChatMemory.builder().build();
+
+  // vector store
+  @Autowired
+  private VectorStore vectorStore;
 
   // We use builder when we have only one model
   public OpenAiController(ChatClient.Builder builder) {
@@ -128,8 +136,12 @@ public class OpenAiController {
   }
 
   @PostMapping("/product")
-  public String getProducts(@RequestParam String text) {
+  public List<Document> getProducts(@RequestParam String text) {
 
-    return "";
+    // search for similar things in the chunks using simple text
+    // return vectorStore.similaritySearch(text);
+
+    // or search request
+    return vectorStore.similaritySearch(SearchRequest.builder().query(text).topK(2).build());
   }
 }

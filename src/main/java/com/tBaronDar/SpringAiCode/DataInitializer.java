@@ -17,6 +17,7 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class DataInitializer {
   // created as bean in AppConfig(simiral-ish to repo)
+  // it is the implementation of vector db
   @Autowired
   private VectorStore vectorStore;
 
@@ -27,16 +28,18 @@ public class DataInitializer {
     TextReader textReader = new TextReader(new ClassPathResource("product_details.txt"));
 
     // to get the documents
-    List<Document> docs = textReader.get();
+    List<Document> docsList = textReader.get();
 
     // create splitter
+    // that does the chunking
     TextSplitter splitter = TokenTextSplitter.builder()
-        .withChunkSize(200)
+        .withChunkSize(500)
         .withMinChunkSizeChars(50)
         .build();
 
     // split documents
-    List<Document> documents = splitter.split(docs);
+    // list of chuncks
+    List<Document> documents = splitter.split(docsList);
 
     vectorStore.add(documents);
   }
