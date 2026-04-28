@@ -142,6 +142,10 @@ public class OpenAiController {
     // return vectorStore.similaritySearch(text);
 
     // or search request
-    return vectorStore.similaritySearch(SearchRequest.builder().query(text).topK(2).build());
+    return vectorStore.similaritySearch(SearchRequest
+        .builder()
+        .query(text)
+        .topK(2)
+        .build());
   }
 }
