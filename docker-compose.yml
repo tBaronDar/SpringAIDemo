@@ -1,0 +1,11 @@
+services:
+  pgvector:
+    image: "pgvector/pgvector:pg16"
+    environment:
+      - "POSTGRES_DB=barondb"
+      - "POSTGRES_USER=themis"
+      - "POSTGRES_PASSWORD=1234"
+    labels:
+      - "org.springframework.boot.service-connection=postgres"
+    ports:
+      - "5432"
