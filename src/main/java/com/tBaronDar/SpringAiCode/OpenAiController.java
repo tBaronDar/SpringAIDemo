@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
@@ -148,4 +149,18 @@ public class OpenAiController {
         .topK(2)
         .build());
   }
+
+  @PostMapping("/ask")
+  public ResponseEntity<String> getAnswerWithRags(@RequestParam String query) {
+
+    String chatResponse = chatClient
+        .prompt(query)
+        // in the advisor we embed the knoledge source ie the vector store
+        .advisors(QuestionAnswerAdvisor.builder(vectorStore).build())
+        .call()
+        .content();
+
+    return ResponseEntity.ok(chatResponse);
+  }
+
 }
